@@ -38,3 +38,19 @@ button {
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
+/* Ensure map container has dimensions */
+#map-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* Fix potential HTML body margin issues */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
