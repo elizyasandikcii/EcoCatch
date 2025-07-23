@@ -3,20 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoCatch | Microplastic & Biodiversity Tracker</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <title>EcoCatch | Microplastic Tracker</title>
+  <!-- Load Leaflet CSS FIRST -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+  <!-- Your CSS -->
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-  <!-- Hero Section -->
   <header class="hero">
     <h1>🌱 EcoCatch</h1>
     <p>Tracking microplastics through algae & biodiversity risks</p>
   </header>
 
-  <!-- Interactive Map -->
+  <!-- Map Container MUST have defined dimensions -->
   <section id="map-container">
-    <div id="map"></div>
+    <div id="map" style="height: 600px;"></div> <!-- Height is critical! -->
     <div class="map-controls">
       <button id="microplastic-btn">Microplastics</button>
       <button id="biodiversity-btn">Biodiversity Risk</button>
@@ -24,13 +27,12 @@
     </div>
   </section>
 
-  <!-- Data Sources -->
-  <footer>
-    <p>Data: Sentinel, EMODnet, Landsat</p>
-  </footer>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Load Leaflet JS BEFORE your scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+  <!-- Your scripts -->
   <script src="scripts/map.js"></script>
-  <script src="scripts/app.js"></script>
+  <script src="scripts/actions.js"></script>
 </body>
 </html>
