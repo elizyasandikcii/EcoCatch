@@ -1,0 +1,40 @@
+/* STEM 2030-inspired colors */
+:root {
+  --primary: #2c3e50;
+  --secondary: #3498db;
+  --eco-green: #27ae60;
+  --alert-red: #e74c3c;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+#map {
+  height: 70vh;
+  width: 100%;
+}
+
+.map-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+button {
+  background: var(--eco-green);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
