@@ -1,0 +1,12 @@
+<div class="validation-metrics">
+  <div class="metric">
+    <h4>Correlation Coefficient</h4>
+    <p class="value">0.89 ± 0.03</p>
+    <p class="description">Between NDCI and microplastic concentration</p>
+  </div>
+  <div class="metric">
+    <h4>Validation Stations</h4>
+    <p class="value">1,247</p>
+    <p class="description">Ground-truth sampling points</p>
+  </div>
+</div>
