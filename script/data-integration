@@ -1,0 +1,60 @@
+// EMODnet-Sentinel Data Crosswalk
+class DataIntegrator {
+  constructor() {
+    this.emodnetData = null;
+    this.sentinelData = null;
+    this.correlatedData = [];
+  }
+
+  async loadDatasets() {
+    // 1. Fetch EMODnet Microplastic Data
+    this.emodnetData = await this.fetchEmodnetData();
+    
+    // 2. Fetch Sentinel Algae Data (NDCI)
+    this.sentinelData = await this.fetchSentinelData();
+    
+    // 3. Correlate datasets
+    this.correlateData();
+  }
+
+  async fetchEmodnetData() {
+    const response = await fetch('https://emodnet-api.example.com/microplastics');
+    return response.json(); // { lat, lng, concentration, timestamp }
+  }
+
+  async fetchSentinelData() {
+    const response = await fetch('https://sentinel-api.example.com/ndci');
+    return response.json(); // { lat, lng, ndci_value, timestamp }
+  }
+
+  correlateData() {
+    // Spatial-temporal matching (1km radius, ±24h window)
+    this.emodnetData.forEach(mpSample => {
+      const matchingAlgae = this.sentinelData.find(algae => 
+        this.calculateDistance(mpSample, algae) < 1 && 
+        Math.abs(mpSample.timestamp - algae.timestamp) < 86400000
+      );
+      
+      if (matchingAlgae) {
+        this.correlatedData.push({
+          lat: mpSample.lat,
+          lng: mpSample.lng,
+          microplastic: mpSample.concentration,
+          ndci: matchingAlgae.ndci_value,
+          correlation: this.calculateCorrelation(mpSample, matchingAlgae)
+        });
+      }
+    });
+  }
+
+  calculateDistance(point1, point2) {
+    // Haversine formula implementation
+    return /*...*/;
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const integrator = new DataIntegrator();
+  integrator.loadDatasets();
+});
