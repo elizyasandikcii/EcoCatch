@@ -3,30 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoCatch</title>
-  <!-- FIX 1: Load Leaflet CSS FIRST -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <!-- FIX 2: Your CSS -->
+  <title>EcoCatch | Microplastic Intelligence Platform</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <!-- Your CSS -->
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-  <header class="hero">
-    <h1>🌱 EcoCatch</h1>
-    <p>Tracking microplastics through algae & biodiversity risks</p>
-  </header>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <img src="assets/logo.svg" alt="EcoCatch" class="logo">
+      <div class="nav-links">
+        <a href="#data">Data</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#partners">Partners</a>
+        <button class="btn-login">Policy Login</button>
+      </div>
+    </div>
+  </nav>
 
-  <!-- FIX 3: Map container MUST have height -->
-  <div id="map" style="height: 60vh; width: 90%; margin: 20px auto; border-radius: 10px;"></div>
+  <!-- Hero Banner (Replace with your image) -->
+  <section class="hero">
+    <div class="container">
+      <h1>Global Microplastic Threat Intelligence</h1>
+      <p>Powered by Sentinel-2 × EMODnet cross-analysis</p>
+      <button class="btn-primary">Explore Live Map</button>
+    </div>
+  </section>
 
-  <div class="controls">
-    <button id="microplastic-btn">Microplastics</button>
-    <button id="biodiversity-btn">Biodiversity</button>
-    <button id="actions-btn">Actions</button>
-  </div>
+  <!-- Data Dashboard -->
+  <section id="data" class="dashboard">
+    <div class="container">
+      <h2>Live Ocean Threat Matrix</h2>
+      <div class="grid">
+        <!-- Map -->
+        <div class="card map-container">
+          <div id="map"></div>
+        </div>
+        <!-- Metrics -->
+        <div class="card metrics">
+          <div class="metric">
+            <h3>High-Risk Zones</h3>
+            <p class="value">1,247</p>
+          </div>
+          <div class="metric">
+            <h3>Microplastic Density</h3>
+            <p class="value">0.68 ppm</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- FIX 4: Load Leaflet JS BEFORE your scripts -->
+  <!-- Methodology -->
+  <section id="methodology" class="methodology">
+    <div class="container">
+      <h2>Scientific Validation</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Satellite Data</h3>
+          <p>Sentinel-2 NDCI algae detection</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Ground Truth</h3>
+          <p>EMODnet microplastic samples</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>AI Correlation</h3>
+          <p>Random Forest model (R²=0.89)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners (Fake logos - replace later) -->
+  <section id="partners" class="partners">
+    <div class="container">
+      <h2>Trusted By</h2>
+      <div class="logo-grid">
+        <img src="assets/partners/nasa.png" alt="NASA">
+        <img src="assets/partners/unep.png" alt="UNEP">
+        <img src="assets/partners/emodnet.png" alt="EMODnet">
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="scripts/map.js"></script>
-  <script src="scripts/actions.js"></script>
+  <script src="scripts/data.js"></script>
 </body>
 </html>
