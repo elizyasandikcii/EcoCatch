@@ -1,18 +1,15 @@
-// Initialize map WITH VIEWPORT SET
-const map = L.map('map').setView([30, 0], 3); // Added zoom level 3
+// Initialize map
+const map = L.map('map').setView([30, 0], 3);
 
-// Add tile layer with CORRECT URL FORMAT
+// Add base layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  attribution: '© OpenStreetMap'
 }).addTo(map);
 
-// Test marker to verify map works
-L.marker([30, 0]).addTo(map)
-  .bindPopup("Map is working!")
-  .openPopup();
-
-// Microplastics button - TEST FUNCTION
-document.getElementById('microplastic-btn').addEventListener('click', function() {
-  alert("Microplastics button works!");
-  // Your actual microplastics logic will go here
-});
+// Add fake microplastic data
+L.circle([40.7128, -74.0060], {
+  color: 'red',
+  fillColor: '#f03',
+  fillOpacity: 0.5,
+  radius: 500000
+}).addTo(map).bindPopup('New York Microplastic Hotspot');
