@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Ecocatch</title>
-  </head>
-  <body>
-    <h1>Microplastics beware. Ecocatch is here.</h1>
-    <p>Science. Seaweed. Spite.</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoCatch | Microplastic & Biodiversity Tracker</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- Hero Section -->
+  <header class="hero">
+    <h1>🌱 EcoCatch</h1>
+    <p>Tracking microplastics through algae & biodiversity risks</p>
+  </header>
+
+  <!-- Interactive Map -->
+  <section id="map-container">
+    <div id="map"></div>
+    <div class="map-controls">
+      <button id="microplastic-btn">Microplastics</button>
+      <button id="biodiversity-btn">Biodiversity Risk</button>
+      <button id="actions-btn">Country Actions</button>
+    </div>
+  </section>
+
+  <!-- Data Sources -->
+  <footer>
+    <p>Data: Sentinel, EMODnet, Landsat</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="scripts/map.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
 </html>
