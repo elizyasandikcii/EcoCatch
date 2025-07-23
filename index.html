@@ -3,71 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoCatch | Scientifically Validated Tracking</title>
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <!-- New Scientific Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <title>EcoCatch</title>
+  <!-- FIX 1: Load Leaflet CSS FIRST -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- FIX 2: Your CSS -->
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
   <header class="hero">
-    <div class="logo-container">
-      <img src="assets/ecocatch-logo.svg" alt="EcoCatch Logo" class="logo">
-      <h1>EcoCatch</h1>
-    </div>
-    <p class="subtitle">Microplastic tracking validated by EMODnet & Sentinel cross-analysis</p>
+    <h1>🌱 EcoCatch</h1>
+    <p>Tracking microplastics through algae & biodiversity risks</p>
   </header>
 
-  <!-- New Scientific Partners Bar -->
-  <div class="partners">
-    <img src="assets/emodnet-logo.png" alt="EMODnet">
-    <img src="assets/sentinel-logo.png" alt="Sentinel">
-    <img src="assets/unep-logo.png" alt="UNEP">
+  <!-- FIX 3: Map container MUST have height -->
+  <div id="map" style="height: 60vh; width: 90%; margin: 20px auto; border-radius: 10px;"></div>
+
+  <div class="controls">
+    <button id="microplastic-btn">Microplastics</button>
+    <button id="biodiversity-btn">Biodiversity</button>
+    <button id="actions-btn">Actions</button>
   </div>
 
-  <!-- Updated Map Section -->
-  <section class="data-section">
-    <div class="map-container" id="map"></div>
-    
-    <div class="data-controls">
-      <button class="data-btn active" data-layer="microplastics">
-        <i class="fas fa-microscope"></i> Microplastics
-      </button>
-      <button class="data-btn" data-layer="biodiversity">
-        <i class="fas fa-fish"></i> Biodiversity Risk
-      </button>
-      <button class="data-btn" data-layer="actions">
-        <i class="fas fa-file-signature"></i> Policy Actions
-      </button>
-    </div>
-  </section>
-
-  <!-- New Scientific Methodology Section -->
-  <section class="methodology">
-    <h2>Our Data Cross-Validation Process</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-number">1</div>
-        <h3>EMODnet Microplastic Samples</h3>
-        <p>Ground-truth data from 12,000+ sampling stations</p>
-      </div>
-      <div class="step">
-        <div class="step-number">2</div>
-        <h3>Sentinel-2 Algae Detection</h3>
-        <p>Normalized Difference Chlorophyll Index (NDCI)</p>
-      </div>
-      <div class="step">
-        <div class="step-number">3</div>
-        <h3>Machine Learning Correlation</h3>
-        <p>Random Forest model (R² = 0.87 in test datasets)</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Scripts -->
+  <!-- FIX 4: Load Leaflet JS BEFORE your scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="scripts/data-integration.js"></script> <!-- New file -->
-  <script src="scripts/map-manager.js"></script>
+  <script src="scripts/map.js"></script>
+  <script src="scripts/actions.js"></script>
 </body>
 </html>
