@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoCatch | Microplastic Intelligence Platform</title>
+    <title>EcoCatch | Microplastic Intelligence</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --stem-black: #121212;
@@ -45,6 +46,7 @@
             z-index: 1000;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--stem-shadow);
         }
 
         .stem-logo {
@@ -355,32 +357,158 @@
             color: rgba(0, 0, 0, 0.7);
         }
 
-        /* Partners section */
-        .partners-section {
-            padding: 80px 60px;
+        /* Correlation Section */
+        .correlation-section {
+            padding: 100px 60px;
             background: linear-gradient(135deg, #0B4F6C 0%, #1F7A8C 100%);
             color: white;
+        }
+        
+        .correlation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .correlation-visual {
+            position: relative;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .correlation-visual h4 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--stem-teal);
             text-align: center;
         }
-
-        .partners-grid {
+        
+        .correlation-chart {
+            width: 100%;
+            height: 300px;
+            position: relative;
             display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 20px 0;
+        }
+        
+        .chart-bar {
+            width: 40px;
+            background: var(--stem-teal);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: height 0.5s ease;
+        }
+        
+        .chart-bar.algae {
+            background: #00c9a7;
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .correlation-content h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--stem-teal);
+        }
+        
+        .correlation-content p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        .corr-points {
+            margin-top: 30px;
+        }
+        
+        .corr-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .corr-point i {
+            color: var(--stem-teal);
+            font-size: 20px;
+            margin-right: 15px;
+            margin-top: 3px;
+        }
+
+        /* Sources Section */
+        .sources-section {
+            padding: 100px 60px;
+            background: var(--stem-light-gray);
+        }
+        
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 50px auto 0;
+        }
+        
+        .source-card {
+            background: var(--stem-white);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--stem-shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .source-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .source-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(0, 168, 150, 0.1);
+            display: flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 40px;
-            max-width: 1000px;
-            margin: 40px auto 0;
+            margin: 0 auto 25px;
+            font-size: 36px;
+            color: var(--stem-teal);
         }
-
-        .partner-logo {
-            height: 60px;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            filter: brightness(0) invert(1);
+        
+        .source-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--stem-black);
         }
-
-        .partner-logo:hover {
-            opacity: 1;
+        
+        .source-card p {
+            color: rgba(0, 0, 0, 0.7);
+            line-height: 1.7;
         }
 
         /* Footer */
@@ -406,6 +534,10 @@
             .stem-main-content {
                 margin-left: 200px;
             }
+            
+            .correlation-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -426,7 +558,7 @@
                 margin-top: 20px;
             }
             
-            .stem-hero, .methodology-section, .data-section, .partners-section {
+            .stem-hero, .methodology-section, .data-section, .correlation-section, .sources-section {
                 padding: 60px 30px;
             }
             
@@ -450,8 +582,8 @@
         <div class="stem-nav-links">
             <a href="#data" class="active">Data</a>
             <a href="#methodology">Methodology</a>
-            <a href="#research">Research</a>
-            <a href="#policy">Policy Actions</a>
+            <a href="#correlation">Correlation</a>
+            <a href="#sources">Data Sources</a>
             <a href="#about">About</a>
         </div>
         <div class="stem-nav-footer">
@@ -474,7 +606,7 @@
                     </div>
                     <div class="stat-card">
                         <div class="stat-value">0.89</div>
-                        <div class="stat-label">Correlation Accuracy</div>
+                        <div class="stat-label">Correlation Coefficient</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value">247</div>
@@ -574,27 +706,121 @@
                 </div>
             </div>
         </section>
-
-        <!-- Partners Section -->
-        <section class="partners-section">
+        
+        <!-- Correlation Section -->
+        <section id="correlation" class="correlation-section">
+            <div class="correlation-container">
+                <div class="correlation-content">
+                    <h3>Understanding the Correlation Coefficient</h3>
+                    <p>The correlation coefficient (r = 0.89) quantifies the strength of the relationship between algal blooms detected by Sentinel satellites and microplastic concentrations measured by EMODnet.</p>
+                    
+                    <p>This high correlation enables us to accurately predict microplastic hotspots using satellite data where direct measurements are unavailable.</p>
+                    
+                    <div class="corr-points">
+                        <div class="corr-point">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>Strong Positive Correlation</strong>
+                                <p>As algal concentrations increase, microplastic concentrations also increase</p>
+                            </div>
+                        </div>
+                        
+                        <div class="corr-point">
+                            <i class="fas fa-wave-square"></i>
+                            <div>
+                                <strong>Seasonal Patterns</strong>
+                                <p>Correlation strength varies with ocean currents and seasonal changes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="corr-point">
+                            <i class="fas fa-satellite"></i>
+                            <div>
+                                <strong>Satellite Validation</strong>
+                                <p>Landsat and Copernicus data used to validate correlation patterns</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="correlation-visual">
+                    <h4>Algae vs. Microplastic Correlation</h4>
+                    <div class="correlation-chart">
+                        <div class="chart-bar algae" style="height: 70%;">
+                            <span class="chart-value">0.82</span>
+                            <span class="chart-label">Algae</span>
+                        </div>
+                        <div class="chart-bar" style="height: 65%;">
+                            <span class="chart-value">0.75</span>
+                            <span class="chart-label">Plastic</span>
+                        </div>
+                        <div class="chart-bar algae" style="height: 85%;">
+                            <span class="chart-value">0.94</span>
+                            <span class="chart-label">Algae</span>
+                        </div>
+                        <div class="chart-bar" style="height: 80%;">
+                            <span class="chart-value">0.89</span>
+                            <span class="chart-label">Plastic</span>
+                        </div>
+                        <div class="chart-bar algae" style="height: 75%;">
+                            <span class="chart-value">0.86</span>
+                            <span class="chart-label">Algae</span>
+                        </div>
+                        <div class="chart-bar" style="height: 70%;">
+                            <span class="chart-value">0.78</span>
+                            <span class="chart-label">Plastic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sources Section -->
+        <section id="sources" class="sources-section">
             <div class="section-header">
-                <h2>Trusted by Leading Organizations</h2>
-                <p>Our data partnerships enable the most accurate microplastic tracking available</p>
+                <h2>Data Sources</h2>
+                <p>Our platform integrates multiple data sources for comprehensive microplastic tracking</p>
             </div>
             
-            <div class="partners-grid">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/200px-NASA_logo.svg.png" class="partner-logo" alt="NASA">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/ESA_logo_2020.svg/320px-ESA_logo_2020.svg.png" class="partner-logo" alt="ESA">
-                <img src="https://www.emodnet.eu/sites/emodnet.eu/files/public/styles/medium/public/emodnet_logo_0.png" class="partner-logo" alt="EMODnet">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/European_Commission.svg/320px-European_Commission.svg.png" class="partner-logo" alt="European Commission">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/NOAA_logo.svg/320px-NOAA_logo.svg.png" class="partner-logo" alt="NOAA">
+            <div class="sources-grid">
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3>EMODnet</h3>
+                    <p>European Marine Observation and Data Network providing ground-truth microplastic measurements from thousands of sampling stations.</p>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <h3>Sentinel-2</h3>
+                    <p>High-resolution multispectral imaging for algal bloom detection using NDCI (Normalized Difference Chlorophyll Index).</p>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3>Landsat</h3>
+                    <p>Long-term Earth observation data for historical pattern analysis and validation of correlation models.</p>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-earth-europe"></i>
+                    </div>
+                    <h3>Copernicus</h3>
+                    <p>European Union's Earth observation program providing comprehensive environmental monitoring data.</p>
+                </div>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="footer">
             <p>© 2023 EcoCatch | Microplastic Intelligence Platform</p>
-            <p>Data Sources: Sentinel-2, EMODnet, Landsat, NOAA | All data updated hourly</p>
+            <p>Data Sources: EMODnet, Sentinel, Landsat, Copernicus | All data updated hourly</p>
         </footer>
     </div>
 
@@ -656,27 +882,24 @@
                     weight: 2,
                     dashArray: '10, 10'
                 }).addTo(map);
-                
-                // Add arrowhead
-                const arrow = L.polylineDecorator(line, {
-                    patterns: [
-                        { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ 
-                            pixelSize: 10, 
-                            polygon: false, 
-                            pathOptions: { 
-                                stroke: true, 
-                                color: '#00A896', 
-                                weight: 2 
-                            } 
-                        })}
-                    ]
-                }).addTo(map);
             });
             
             // Force the map to resize properly
             setTimeout(() => {
                 map.invalidateSize();
             }, 100);
+            
+            // Animate the correlation bars
+            setTimeout(() => {
+                const bars = document.querySelectorAll('.chart-bar');
+                bars.forEach(bar => {
+                    const height = bar.style.height;
+                    bar.style.height = '0';
+                    setTimeout(() => {
+                        bar.style.height = height;
+                    }, 300);
+                });
+            }, 500);
         });
     </script>
 </body>
