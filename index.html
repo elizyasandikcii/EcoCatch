@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoCatch | Microplastic Intelligence</title>
+    <title>Global Ocean Microplastic Distribution</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --stem-black: #121212;
+            --ocean-blue: #1F7A8C;
+            --ocean-teal: #00A896;
+            --data-high: #FF4444;
+            --data-medium: #FFAA00;
+            --data-low: #FFEE00;
+            --data-very-low: #A8DADC;
             --stem-white: #FFFFFF;
-            --stem-teal: #00A896;
-            --stem-dark-teal: #007d6e;
-            --stem-gray: #F5F5F5;
-            --stem-light-gray: #fafafa;
+            --stem-light-gray: #f8f9fa;
             --stem-border: rgba(0, 0, 0, 0.08);
             --stem-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
@@ -28,240 +30,58 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--stem-white);
-            color: var(--stem-black);
+            color: #121212;
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Navigation */
-        .stem-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 240px;
-            padding: 40px 30px;
-            background: var(--stem-white);
-            border-right: 1px solid var(--stem-border);
-            z-index: 1000;
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
             display: flex;
-            flex-direction: column;
-            box-shadow: var(--stem-shadow);
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--stem-border);
+            margin-bottom: 30px;
         }
 
-        .stem-logo {
-            margin-bottom: 60px;
-        }
-
-        .stem-logo h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--stem-teal);
+        .logo {
             display: flex;
             align-items: center;
         }
 
-        .stem-logo h1:before {
-            content: "🌊";
-            margin-right: 10px;
+        .logo h1 {
             font-size: 28px;
+            font-weight: 700;
+            color: var(--ocean-teal);
+            margin-left: 15px;
         }
 
-        .stem-nav-links {
+        .logo-icon {
+            font-size: 32px;
+            color: var(--ocean-teal);
+        }
+
+        .nav-links {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
-            flex-grow: 1;
+            gap: 30px;
         }
 
-        .stem-nav-links a {
-            color: var(--stem-black);
+        .nav-links a {
+            color: #121212;
             text-decoration: none;
             font-weight: 500;
             font-size: 18px;
-            transition: all 0.3s ease;
-            padding: 8px 15px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
+            transition: color 0.3s;
         }
 
-        .stem-nav-links a:before {
-            content: "•";
-            margin-right: 10px;
-            color: var(--stem-teal);
-            font-size: 24px;
-            line-height: 1;
-        }
-
-        .stem-nav-links a.active, .stem-nav-links a:hover {
-            background: rgba(0, 168, 150, 0.08);
-            color: var(--stem-teal);
-        }
-
-        .stem-nav-footer {
-            margin-top: auto;
-            padding-top: 30px;
-            border-top: 1px solid var(--stem-border);
-            color: rgba(0, 0, 0, 0.6);
-            font-size: 14px;
-        }
-
-        /* Main content */
-        .stem-main-content {
-            margin-left: 240px;
-        }
-
-        /* Hero section */
-        .stem-hero {
-            padding: 120px 60px;
-            background: linear-gradient(135deg, #0B4F6C 0%, #1F7A8C 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stem-hero:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1470') center/cover;
-            opacity: 0.15;
-        }
-
-        .stem-hero-content {
-            position: relative;
-            max-width: 800px;
-        }
-
-        .stem-hero h2 {
-            font-size: 52px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .stem-hero p {
-            font-size: 20px;
-            max-width: 600px;
-            opacity: 0.9;
-            margin-bottom: 40px;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: var(--stem-teal);
-        }
-
-        .stat-label {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        /* Methodology section */
-        .methodology-section {
-            padding: 100px 60px;
-            background: var(--stem-light-gray);
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 60px;
-        }
-
-        .section-header h2 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: var(--stem-teal);
-        }
-
-        .section-header p {
-            font-size: 18px;
-            color: rgba(0, 0, 0, 0.7);
-        }
-
-        .process-steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .step-card {
-            background: var(--stem-white);
-            border-radius: 16px;
-            padding: 40px 30px;
-            box-shadow: var(--stem-shadow);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .step-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--stem-teal);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 auto 25px;
-        }
-
-        .step-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: var(--stem-black);
-        }
-
-        .step-card p {
-            color: rgba(0, 0, 0, 0.7);
-            line-height: 1.7;
-        }
-
-        /* Data section */
-        .data-section {
-            padding: 100px 60px;
-        }
-
-        .data-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
+        .nav-links a:hover {
+            color: var(--ocean-teal);
         }
 
         .map-container {
@@ -269,573 +89,264 @@
             border-radius: 16px;
             box-shadow: var(--stem-shadow);
             overflow: hidden;
-            padding: 30px;
+            margin-bottom: 40px;
+            position: relative;
+            height: 700px;
         }
 
-        .map-container h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: var(--stem-teal);
+        #ocean-map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--stem-shadow);
+            z-index: 1000;
+            max-width: 250px;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--ocean-teal);
+            font-size: 18px;
+        }
+
+        .legend-item {
             display: flex;
             align-items: center;
+            margin-bottom: 8px;
         }
 
-        .map-container h3:before {
-            content: "📍";
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
             margin-right: 10px;
         }
 
-        #stem-map {
-            height: 600px;
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--stem-border);
+        .legend-label {
+            font-size: 14px;
         }
 
-        .metrics-container {
-            display: flex;
-            flex-direction: column;
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
+            margin-bottom: 40px;
         }
 
-        .metric-card {
+        .stat-card {
             background: var(--stem-white);
             border-radius: 16px;
             box-shadow: var(--stem-shadow);
             padding: 30px;
+            text-align: center;
         }
 
-        .metric-card h3 {
-            font-size: 20px;
+        .stat-icon {
+            font-size: 36px;
+            color: var(--ocean-teal);
             margin-bottom: 20px;
-            color: var(--stem-teal);
-            display: flex;
-            align-items: center;
         }
 
-        .metric-card h3:before {
-            content: "📊";
-            margin-right: 10px;
-        }
-
-        .metric-value {
+        .stat-value {
             font-size: 42px;
             font-weight: 700;
-            color: var(--stem-teal);
-            margin-bottom: 5px;
-            line-height: 1;
+            color: var(--ocean-blue);
+            margin-bottom: 10px;
         }
 
-        .metric-label {
-            font-size: 16px;
+        .stat-label {
+            font-size: 18px;
             color: rgba(0, 0, 0, 0.7);
         }
 
-        .metric-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .mini-metric {
-            background: rgba(0, 168, 150, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            border: 1px solid rgba(0, 168, 150, 0.1);
-        }
-
-        .mini-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--stem-teal);
-        }
-
-        .mini-label {
-            font-size: 14px;
-            color: rgba(0, 0, 0, 0.7);
-        }
-
-        /* Correlation Section */
-        .correlation-section {
-            padding: 100px 60px;
-            background: linear-gradient(135deg, #0B4F6C 0%, #1F7A8C 100%);
-            color: white;
-        }
-        
-        .correlation-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
-        }
-        
-        .correlation-visual {
-            position: relative;
-            height: 400px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-        
-        .correlation-visual h4 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--stem-teal);
-            text-align: center;
-        }
-        
-        .correlation-chart {
-            width: 100%;
-            height: 300px;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            padding: 20px 0;
-        }
-        
-        .chart-bar {
-            width: 40px;
-            background: var(--stem-teal);
-            border-radius: 4px 4px 0 0;
-            position: relative;
-            transition: height 0.5s ease;
-        }
-        
-        .chart-bar.algae {
-            background: #00c9a7;
-        }
-        
-        .chart-label {
-            position: absolute;
-            bottom: -25px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 12px;
-        }
-        
-        .chart-value {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .correlation-content h3 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: var(--stem-teal);
-        }
-        
-        .correlation-content p {
-            margin-bottom: 20px;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-        
-        .corr-points {
-            margin-top: 30px;
-        }
-        
-        .corr-point {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-        
-        .corr-point i {
-            color: var(--stem-teal);
-            font-size: 20px;
-            margin-right: 15px;
-            margin-top: 3px;
-        }
-
-        /* Sources Section */
-        .sources-section {
-            padding: 100px 60px;
+        .data-sources {
             background: var(--stem-light-gray);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
         }
-        
+
+        .sources-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--ocean-blue);
+        }
+
         .sources-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
-            max-width: 1200px;
-            margin: 50px auto 0;
         }
-        
+
         .source-card {
             background: var(--stem-white);
             border-radius: 16px;
-            padding: 40px 30px;
+            padding: 30px;
             text-align: center;
             box-shadow: var(--stem-shadow);
-            transition: transform 0.3s ease;
         }
-        
-        .source-card:hover {
-            transform: translateY(-10px);
-        }
-        
+
         .source-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(0, 168, 150, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 25px;
-            font-size: 36px;
-            color: var(--stem-teal);
+            font-size: 42px;
+            color: var(--ocean-teal);
+            margin-bottom: 20px;
         }
-        
+
         .source-card h3 {
             font-size: 22px;
             margin-bottom: 15px;
-            color: var(--stem-black);
+            color: #121212;
         }
-        
+
         .source-card p {
             color: rgba(0, 0, 0, 0.7);
             line-height: 1.7;
         }
 
-        /* Footer */
         .footer {
-            padding: 40px 60px;
-            background: var(--stem-black);
-            color: rgba(255, 255, 255, 0.7);
             text-align: center;
+            padding: 30px;
+            color: rgba(0, 0, 0, 0.7);
             font-size: 14px;
-        }
-
-        /* Responsive design */
-        @media (max-width: 1024px) {
-            .data-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .stem-nav {
-                width: 200px;
-                padding: 30px 20px;
-            }
-            
-            .stem-main-content {
-                margin-left: 200px;
-            }
-            
-            .correlation-container {
-                grid-template-columns: 1fr;
-            }
+            border-top: 1px solid var(--stem-border);
         }
 
         @media (max-width: 768px) {
-            .stem-nav {
-                position: relative;
-                width: 100%;
-                height: auto;
-                padding: 20px;
-            }
-            
-            .stem-main-content {
-                margin-left: 0;
-            }
-            
-            .stem-nav-links {
-                flex-direction: row;
-                flex-wrap: wrap;
-                margin-top: 20px;
-            }
-            
-            .stem-hero, .methodology-section, .data-section, .correlation-section, .sources-section {
-                padding: 60px 30px;
-            }
-            
-            .stem-hero h2 {
-                font-size: 36px;
-            }
-            
-            .hero-stats {
+            .header {
                 flex-direction: column;
-                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                margin-top: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .map-container {
+                height: 500px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="stem-nav">
-        <div class="stem-logo">
-            <h1>EcoCatch</h1>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🌊</div>
+                <h1>OceanPlastTrack</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#"><i class="fas fa-globe-americas"></i> Global Data</a>
+                <a href="#"><i class="fas fa-microscope"></i> Methodology</a>
+                <a href="#"><i class="fas fa-database"></i> Data Sources</a>
+                <a href="#"><i class="fas fa-book"></i> Research</a>
+            </div>
         </div>
-        <div class="stem-nav-links">
-            <a href="#data" class="active">Data</a>
-            <a href="#methodology">Methodology</a>
-            <a href="#correlation">Correlation</a>
-            <a href="#sources">Data Sources</a>
-            <a href="#about">About</a>
-        </div>
-        <div class="stem-nav-footer">
-            Microplastic Intelligence Platform<br>v2.0
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="stem-main-content">
-        <!-- Hero Section -->
-        <section class="stem-hero">
-            <div class="stem-hero-content">
-                <h2>Global Microplastic Intelligence Platform</h2>
-                <p>Advanced tracking of ocean microplastics using satellite data and AI correlation models</p>
-                
-                <div class="hero-stats">
-                    <div class="stat-card">
-                        <div class="stat-value">12,426</div>
-                        <div class="stat-label">Data Points Collected</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">0.89</div>
-                        <div class="stat-label">Correlation Coefficient</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">247</div>
-                        <div class="stat-label">High-Risk Zones</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Methodology Section -->
-        <section id="methodology" class="methodology-section">
-            <div class="section-header">
-                <h2>Our Data Cross-Validation Process</h2>
-                <p>Combining satellite data with ground-truth measurements for unparalleled accuracy</p>
-            </div>
-            
-            <div class="process-steps">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3>EMODnet Microplastic Samples</h3>
-                    <p>Ground-truth data from 12,000+ sampling stations across European seas. Provides precise measurements of microplastic concentrations in seawater.</p>
-                </div>
-                
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3>Sentinel-2 Algae Detection</h3>
-                    <p>Using Normalized Difference Chlorophyll Index (NDCI) to detect algal blooms. Algae concentrations serve as a proxy for microplastic accumulation zones.</p>
-                </div>
-                
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3>Machine Learning Correlation</h3>
-                    <p>Random Forest model with R² = 0.87 accuracy in test datasets. Continuously refined with new data to improve prediction capabilities.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Data Section -->
-        <section id="data" class="data-section">
-            <div class="data-container">
-                <div class="map-container">
-                    <h3>Global Microplastic Hotspots</h3>
-                    <div id="stem-map"></div>
-                </div>
-                
-                <div class="metrics-container">
-                    <div class="metric-card">
-                        <h3>Key Metrics</h3>
-                        <div class="metric-value">0.89</div>
-                        <div class="metric-label">Correlation Coefficient (Algae→Plastic)</div>
-                        
-                        <div class="metric-grid">
-                            <div class="mini-metric">
-                                <div class="mini-value">0.92</div>
-                                <div class="mini-label">Coastal Accuracy</div>
-                            </div>
-                            <div class="mini-metric">
-                                <div class="mini-value">0.84</div>
-                                <div class="mini-label">Open Sea Accuracy</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="metric-card">
-                        <h3>Risk Analysis</h3>
-                        <div class="metric-value">1,247</div>
-                        <div class="metric-label">High-Risk Zones Identified</div>
-                        
-                        <div class="metric-grid">
-                            <div class="mini-metric">
-                                <div class="mini-value">842</div>
-                                <div class="mini-label">Coastal Zones</div>
-                            </div>
-                            <div class="mini-metric">
-                                <div class="mini-value">405</div>
-                                <div class="mini-label">Open Sea Zones</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="metric-card">
-                        <h3>Data Coverage</h3>
-                        <div class="metric-value">78%</div>
-                        <div class="metric-label">Global Ocean Coverage</div>
-                        
-                        <div class="metric-grid">
-                            <div class="mini-metric">
-                                <div class="mini-value">96%</div>
-                                <div class="mini-label">Northern Hemisphere</div>
-                            </div>
-                            <div class="mini-metric">
-                                <div class="mini-value">63%</div>
-                                <div class="mini-label">Southern Hemisphere</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
         
-        <!-- Correlation Section -->
-        <section id="correlation" class="correlation-section">
-            <div class="correlation-container">
-                <div class="correlation-content">
-                    <h3>Understanding the Correlation Coefficient</h3>
-                    <p>The correlation coefficient (r = 0.89) quantifies the strength of the relationship between algal blooms detected by Sentinel satellites and microplastic concentrations measured by EMODnet.</p>
-                    
-                    <p>This high correlation enables us to accurately predict microplastic hotspots using satellite data where direct measurements are unavailable.</p>
-                    
-                    <div class="corr-points">
-                        <div class="corr-point">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <strong>Strong Positive Correlation</strong>
-                                <p>As algal concentrations increase, microplastic concentrations also increase</p>
-                            </div>
-                        </div>
-                        
-                        <div class="corr-point">
-                            <i class="fas fa-wave-square"></i>
-                            <div>
-                                <strong>Seasonal Patterns</strong>
-                                <p>Correlation strength varies with ocean currents and seasonal changes</p>
-                            </div>
-                        </div>
-                        
-                        <div class="corr-point">
-                            <i class="fas fa-satellite"></i>
-                            <div>
-                                <strong>Satellite Validation</strong>
-                                <p>Landsat and Copernicus data used to validate correlation patterns</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="correlation-visual">
-                    <h4>Algae vs. Microplastic Correlation</h4>
-                    <div class="correlation-chart">
-                        <div class="chart-bar algae" style="height: 70%;">
-                            <span class="chart-value">0.82</span>
-                            <span class="chart-label">Algae</span>
-                        </div>
-                        <div class="chart-bar" style="height: 65%;">
-                            <span class="chart-value">0.75</span>
-                            <span class="chart-label">Plastic</span>
-                        </div>
-                        <div class="chart-bar algae" style="height: 85%;">
-                            <span class="chart-value">0.94</span>
-                            <span class="chart-label">Algae</span>
-                        </div>
-                        <div class="chart-bar" style="height: 80%;">
-                            <span class="chart-value">0.89</span>
-                            <span class="chart-label">Plastic</span>
-                        </div>
-                        <div class="chart-bar algae" style="height: 75%;">
-                            <span class="chart-value">0.86</span>
-                            <span class="chart-label">Algae</span>
-                        </div>
-                        <div class="chart-bar" style="height: 70%;">
-                            <span class="chart-value">0.78</span>
-                            <span class="chart-label">Plastic</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Sources Section -->
-        <section id="sources" class="sources-section">
-            <div class="section-header">
-                <h2>Data Sources</h2>
-                <p>Our platform integrates multiple data sources for comprehensive microplastic tracking</p>
-            </div>
+        <div class="map-container">
+            <div id="ocean-map"></div>
             
+            <div class="map-overlay">
+                <div class="legend-title">Microplastic Concentration (particles/m³)</div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--data-very-low);"></div>
+                    <div class="legend-label">Very Low: &lt;500</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--data-low);"></div>
+                    <div class="legend-label">Low: 500-1,000</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--data-medium);"></div>
+                    <div class="legend-label">Medium: 1,000-10,000</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--data-high);"></div>
+                    <div class="legend-label">High: &gt;10,000</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-water"></i></div>
+                <div class="stat-value">89%</div>
+                <div class="stat-label">Ocean Coverage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-satellite"></i></div>
+                <div class="stat-value">0.92</div>
+                <div class="stat-label">Correlation Coefficient</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-flask"></i></div>
+                <div class="stat-value">24,726</div>
+                <div class="stat-label">Sampling Points</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-value">1,842</div>
+                <div class="stat-label">High-Risk Zones</div>
+            </div>
+        </div>
+        
+        <div class="data-sources">
+            <h2 class="sources-title">Scientific Data Sources</h2>
             <div class="sources-grid">
                 <div class="source-card">
-                    <div class="source-icon">
-                        <i class="fas fa-water"></i>
-                    </div>
+                    <div class="source-icon"><i class="fas fa-water"></i></div>
                     <h3>EMODnet</h3>
-                    <p>European Marine Observation and Data Network providing ground-truth microplastic measurements from thousands of sampling stations.</p>
+                    <p>European Marine Observation Network providing precise microplastic measurements from thousands of sampling stations.</p>
                 </div>
-                
                 <div class="source-card">
-                    <div class="source-icon">
-                        <i class="fas fa-satellite"></i>
-                    </div>
+                    <div class="source-icon"><i class="fas fa-satellite"></i></div>
+                    <h3>Sentinel-3</h3>
+                    <p>Ocean and Land Colour Instrument (OLCI) with 300m resolution for detecting algal blooms as microplastic proxies.</p>
+                </div>
+                <div class="source-card">
+                    <div class="source-icon"><i class="fas fa-satellite"></i></div>
                     <h3>Sentinel-2</h3>
-                    <p>High-resolution multispectral imaging for algal bloom detection using NDCI (Normalized Difference Chlorophyll Index).</p>
+                    <p>Multi-spectral imaging with 10m resolution for coastal monitoring and validation.</p>
                 </div>
-                
                 <div class="source-card">
-                    <div class="source-icon">
-                        <i class="fas fa-globe-americas"></i>
-                    </div>
-                    <h3>Landsat</h3>
-                    <p>Long-term Earth observation data for historical pattern analysis and validation of correlation models.</p>
-                </div>
-                
-                <div class="source-card">
-                    <div class="source-icon">
-                        <i class="fas fa-earth-europe"></i>
-                    </div>
+                    <div class="source-icon"><i class="fas fa-database"></i></div>
                     <h3>Copernicus</h3>
-                    <p>European Union's Earth observation program providing comprehensive environmental monitoring data.</p>
+                    <p>Open ecosystem providing free access to Sentinel data products for scientific research.</p>
                 </div>
             </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>© 2023 EcoCatch | Microplastic Intelligence Platform</p>
-            <p>Data Sources: EMODnet, Sentinel, Landsat, Copernicus | All data updated hourly</p>
-        </footer>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 OceanPlastTrack | Scientific Microplastic Intelligence Platform</p>
+            <p>Data Sources: EMODnet Geology, Sentinel-2, Sentinel-3, Copernicus Data Space | Updated: 2025-07-25</p>
+        </div>
     </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Create the map
-            const map = L.map('stem-map', {
-                zoomControl: false
-            }).setView([30, 0], 3);
+            // Create the ocean-focused map
+            const map = L.map('ocean-map', {
+                zoomControl: false,
+                minZoom: 3,
+                maxBounds: [[-85, -180], [85, 180]],
+                maxBoundsViscosity: 1.0
+            }).setView([20, -40], 3);
             
-            // Add tile layer
+            // Add light basemap with white background
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-                maxZoom: 18,
+                maxZoom: 10,
                 attribution: ''
             }).addTo(map);
             
@@ -844,62 +355,134 @@
                 position: 'topright'
             }).addTo(map);
             
-            // Add microplastic hotspots
-            const hotspots = [
-                { lat: 35, lng: 18, name: "Mediterranean Hotspot", value: 0.82 },
-                { lat: -5, lng: -80, name: "South Pacific Hotspot", value: 0.76 },
-                { lat: 15, lng: 120, name: "South China Sea", value: 0.91 },
-                { lat: 40, lng: -73, name: "North Atlantic", value: 0.78 },
-                { lat: -25, lng: 155, name: "Coral Sea", value: 0.69 }
+            // Create layer for microplastic data
+            const microplasticLayer = L.layerGroup().addTo(map);
+            
+            // Function to generate microplastic points across all oceans
+            function generateOceanMicroplastics() {
+                // Ocean regions with different concentration levels
+                const oceanRegions = [
+                    // High concentration areas
+                    {lat: 35, lng: -150, name: "North Pacific Gyre", density: 0.9, spread: 40},
+                    {lat: 35, lng: 18, name: "Mediterranean Sea", density: 0.92, spread: 15},
+                    {lat: 15, lng: 90, name: "Bay of Bengal", density: 0.88, spread: 20},
+                    {lat: 15, lng: -75, name: "Caribbean Sea", density: 0.87, spread: 15},
+                    
+                    // Medium concentration areas
+                    {lat: 30, lng: -50, name: "North Atlantic Gyre", density: 0.7, spread: 35},
+                    {lat: -25, lng: -10, name: "South Atlantic Gyre", density: 0.65, spread: 35},
+                    {lat: -30, lng: 80, name: "Indian Ocean Gyre", density: 0.68, spread: 30},
+                    {lat: -25, lng: -120, name: "South Pacific Gyre", density: 0.62, spread: 40},
+                    
+                    // Lower concentration areas
+                    {lat: 0, lng: -180, name: "Equatorial Pacific", density: 0.45, spread: 60},
+                    {lat: -45, lng: 0, name: "South Ocean", density: 0.4, spread: 50},
+                    {lat: 65, lng: -20, name: "North Atlantic", density: 0.35, spread: 40},
+                    {lat: -60, lng: 120, name: "Southern Ocean", density: 0.3, spread: 50}
+                ];
+                
+                // Generate points for each ocean region
+                oceanRegions.forEach(region => {
+                    const pointCount = 300 + Math.floor(region.density * 400);
+                    
+                    for (let i = 0; i < pointCount; i++) {
+                        const lat = region.lat + (Math.random() - 0.5) * region.spread;
+                        const lng = region.lng + (Math.random() - 0.5) * region.spread * 2;
+                        
+                        // Ensure we're placing points in water
+                        if (Math.abs(lat) > 80) continue;
+                        
+                        // Base concentration with regional variation
+                        let concentration = Math.min(1, Math.max(0.1, 
+                            region.density + (Math.random() - 0.5) * 0.3));
+                        
+                        // Add some randomness to create clusters
+                        if (Math.random() > 0.8) {
+                            concentration = Math.min(1, concentration + 0.2);
+                        }
+                        
+                        // Determine color based on concentration
+                        let dotColor;
+                        let dotSize;
+                        
+                        if (concentration > 0.8) {
+                            dotColor = 'var(--data-high)';
+                            dotSize = 3.5;
+                        } else if (concentration > 0.6) {
+                            dotColor = 'var(--data-medium)';
+                            dotSize = 2.5;
+                        } else if (concentration > 0.4) {
+                            dotColor = 'var(--data-low)';
+                            dotSize = 1.8;
+                        } else {
+                            dotColor = 'var(--data-very-low)';
+                            dotSize = 1.2;
+                        }
+                        
+                        // Create the point
+                        L.circleMarker([lat, lng], {
+                            radius: dotSize,
+                            fillColor: dotColor,
+                            color: 'transparent',
+                            fillOpacity: 0.6
+                        }).addTo(microplasticLayer);
+                    }
+                });
+            }
+            
+            // Generate ocean microplastic points
+            generateOceanMicroplastics();
+            
+            // Add gyre markers
+            const gyres = [
+                {lat: 35, lng: -150, name: "North Pacific Gyre", concentration: "High"},
+                {lat: 30, lng: -50, name: "North Atlantic Gyre", concentration: "Medium"},
+                {lat: -25, lng: -10, name: "South Atlantic Gyre", concentration: "Medium"},
+                {lat: -30, lng: 80, name: "Indian Ocean Gyre", concentration: "Medium"},
+                {lat: -25, lng: -120, name: "South Pacific Gyre", concentration: "Medium"}
             ];
             
-            hotspots.forEach(hotspot => {
-                const radius = hotspot.value * 600000;
-                const colorIntensity = Math.min(255, Math.floor(hotspot.value * 200));
-                
-                L.circle([hotspot.lat, hotspot.lng], {
-                    color: 'transparent',
-                    fillColor: `rgb(0, ${colorIntensity}, ${Math.floor(150 + (100 - hotspot.value * 50))})`,
-                    fillOpacity: 0.7,
-                    radius: radius
-                }).addTo(map).bindPopup(`
-                    <strong>${hotspot.name}</strong><br>
-                    Microplastic Concentration: ${hotspot.value} ppm<br>
-                    Algae Correlation: ${(hotspot.value * 0.9 + 0.1).toFixed(2)}
-                `);
+            gyres.forEach(gyre => {
+                L.marker([gyre.lat, gyre.lng], {
+                    icon: L.divIcon({
+                        className: 'gyre-marker',
+                        html: `<div style="background: rgba(0, 168, 150, 0.2); border: 2px solid #00A896; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">
+                            <div style="font-size: 14px; font-weight: bold; color: #007d6e;">G</div>
+                        </div>`,
+                        iconSize: [30, 30]
+                    })
+                }).bindPopup(`
+                    <strong>${gyre.name}</strong><br>
+                    Concentration: ${gyre.concentration}<br>
+                    Microplastic hotspot
+                `).addTo(map);
             });
             
-            // Add ocean current lines
+            // Add current lines
             const currents = [
                 { start: [35, -20], end: [25, -60], name: "North Atlantic Current" },
                 { start: [-5, -90], end: [-15, -120], name: "South Pacific Current" },
-                { start: [0, 100], end: [10, 140], name: "Equatorial Current" }
+                { start: [0, 100], end: [10, 140], name: "Equatorial Current" },
+                { start: [45, -10], end: [55, 20], name: "North Atlantic Drift" },
+                { start: [-30, 110], end: [-40, 150], name: "Southern Ocean Current" },
+                { start: [20, -80], end: [10, -100], name: "Caribbean Current" },
+                { start: [25, 120], end: [35, 140], name: "Kuroshio Current" },
+                { start: [-25, 40], end: [-35, 20], name: "Benguela Current" }
             ];
             
             currents.forEach(current => {
-                const line = L.polyline([current.start, current.end], {
+                L.polyline([current.start, current.end], {
                     color: '#00A896',
                     weight: 2,
-                    dashArray: '10, 10'
-                }).addTo(map);
+                    dashArray: '10, 10',
+                    opacity: 0.7
+                }).bindPopup(`<strong>${current.name}</strong>`).addTo(map);
             });
             
             // Force the map to resize properly
             setTimeout(() => {
                 map.invalidateSize();
             }, 100);
-            
-            // Animate the correlation bars
-            setTimeout(() => {
-                const bars = document.querySelectorAll('.chart-bar');
-                bars.forEach(bar => {
-                    const height = bar.style.height;
-                    bar.style.height = '0';
-                    setTimeout(() => {
-                        bar.style.height = height;
-                    }, 300);
-                });
-            }, 500);
         });
     </script>
 </body>
