@@ -1517,7 +1517,7 @@
                 });
             });
             
-            // Initialize all maps
+            // Initialize all maps with proper tile layers
             const algaeMap = L.map('algae-map', {
                 zoomControl: false,
                 minZoom: 3,
@@ -1539,15 +1539,21 @@
                 maxBoundsViscosity: 1.0
             }).setView([20, -40], 3);
             
-            // Add light basemap to all maps
+            // Add proper base map layers with attribution
             const lightBase = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            });
+            }).addTo(algaeMap);
             
-            lightBase.addTo(algaeMap);
-            lightBase.addTo(microplasticMap);
-            lightBase.addTo(combinedMap);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(microplasticMap);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(combinedMap);
             
             // Add custom zoom controls
             L.control.zoom({ position: 'topright' }).addTo(algaeMap);
@@ -1678,17 +1684,19 @@
                     document.getElementById(mapId).classList.add('active');
                     
                     // Invalidate map size to ensure proper rendering
-                    switch(mapId) {
-                        case 'algae-map':
-                            algaeMap.invalidateSize();
-                            break;
-                        case 'microplastic-map':
-                            microplasticMap.invalidateSize();
-                            break;
-                        case 'combined-map':
-                            combinedMap.invalidateSize();
-                            break;
-                    }
+                    setTimeout(() => {
+                        switch(mapId) {
+                            case 'algae-map':
+                                algaeMap.invalidateSize();
+                                break;
+                            case 'microplastic-map':
+                                microplasticMap.invalidateSize();
+                                break;
+                            case 'combined-map':
+                                combinedMap.invalidateSize();
+                                break;
+                        }
+                    }, 100);
                 });
             });
             
