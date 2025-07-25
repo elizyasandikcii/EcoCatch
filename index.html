@@ -1,977 +1,251 @@
+<!-- EVERYTHING YOU NEED IS HERE -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OceanPlastTrack | Scientifically Validated Microplastic Monitoring</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --ocean-blue: #1F7A8C;
-            --ocean-teal: #00A896;
-            --ocean-deep: #005F73;
-            --data-high: #FF4444;
-            --data-medium: #FFAA00;
-            --data-low: #FFEE00;
-            --data-very-low: #A8DADC;
-            --algae-color: #27ae60;
-            --publication-color: #8e44ad;
-            --stem-white: #FFFFFF;
-            --stem-light-gray: #f8f9fa;
-            --stem-border: rgba(0, 0, 0, 0.08);
-            --stem-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --section-padding: 80px 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoCatch | Marine Microplastic Monitoring</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --ocean-blue: #1F7A8C;
+      --ocean-teal: #00A896;
+      --ocean-deep: #005F73;
+      --data-high: #FF4444;
+      --data-medium: #FFAA00;
+      --data-low: #FFEE00;
+      --data-very-low: #A8DADC;
+      --algae-color: #27ae60;
+      --publication-color: #8e44ad;
+      --stem-white: #FFFFFF;
+      --stem-light-gray: #f8f9fa;
+      --stem-border: rgba(0, 0, 0, 0.08);
+      --stem-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: linear-gradient(to bottom, #f0f9ff, #e6f7ff, #f0f9ff);
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to bottom, #f0f9ff, #e6f7ff, #f0f9ff);
-            color: #121212;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    .nav-container {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 10px 0;
+    }
 
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    .menu-toggle {
+      display: none;
+      font-size: 26px;
+      cursor: pointer;
+      color: var(--ocean-deep);
+      padding: 15px;
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      z-index: 1001;
+    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            position: sticky;
-            top: 0;
-            background: rgba(255, 255, 255, 0.95);
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(31, 122, 140, 0.1);
-            border-radius: 0 0 12px 12px;
-        }
+    .nav-menu {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-        }
+    .nav-item {
+      margin: 10px 15px;
+    }
 
-        .logo h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--ocean-teal);
-            margin-left: 15px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    .nav-link {
+      text-decoration: none;
+      color: var(--ocean-deep);
+      font-weight: 600;
+      font-size: 16px;
+      padding: 8px 16px;
+      border-radius: 30px;
+      transition: all 0.3s;
+    }
 
-        .logo-icon {
-            font-size: 32px;
-            color: var(--ocean-teal);
-            background: rgba(0, 168, 150, 0.1);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .nav-link:hover,
+    .nav-link.active {
+      background: var(--ocean-teal);
+      color: white;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
+    .section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
 
-        .nav-links a {
-            color: var(--ocean-deep);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 18px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 15px;
-            border-radius: 30px;
-        }
+    .section-title {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--ocean-deep);
+      position: relative;
+    }
 
-        .nav-links a:hover {
-            background: rgba(31, 122, 140, 0.1);
-            color: var(--ocean-teal);
-            transform: translateY(-2px);
-        }
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--ocean-teal);
+      border-radius: 2px;
+    }
 
-        .section {
-            padding: var(--section-padding);
-        }
+    .source-link {
+      display: inline-block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: var(--ocean-teal);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
 
-        .section-title {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 60px;
-            color: var(--ocean-deep);
-            position: relative;
-        }
+    .source-link:hover {
+      background: var(--ocean-blue);
+    }
 
-        .section-title:after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--ocean-teal);
-            border-radius: 2px;
-        }
+    form label {
+      display: block;
+      margin: 10px 0 5px;
+    }
 
-        .map-container {
-            background: var(--stem-white);
-            border-radius: 16px;
-            box-shadow: var(--stem-shadow);
-            overflow: hidden;
-            position: relative;
-            height: 600px;
-            margin-bottom: 30px;
-        }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
 
-        #ocean-map {
-            height: 100%;
-            width: 100%;
-        }
+    button[type="submit"] {
+      background: var(--ocean-teal);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-        .compact-legend {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0 40px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+    button[type="submit"]:hover {
+      background: var(--ocean-blue);
+    }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            background: var(--stem-light-gray);
-            padding: 8px 15px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 500;
-        }
+    @media (max-width: 768px) {
+      .nav-menu {
+        flex-direction: column;
+        align-items: center;
+        display: none;
+      }
 
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 4px;
-            margin-right: 8px;
-        }
+      .nav-menu.active {
+        display: flex;
+      }
 
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 30px 0 50px;
-        }
-
-        .stat-card {
-            background: var(--stem-white);
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-top: 4px solid var(--ocean-teal);
-            box-shadow: var(--stem-shadow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-icon {
-            font-size: 36px;
-            color: var(--ocean-teal);
-            margin-bottom: 20px;
-            background: rgba(0, 168, 150, 0.1);
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .stat-value {
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--ocean-blue);
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            font-size: 18px;
-            color: rgba(0, 0, 0, 0.7);
-        }
-
-        .methodology-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .method-card {
-            background: var(--stem-white);
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: var(--stem-shadow);
-            transition: transform 0.3s;
-            border-left: 4px solid var(--ocean-teal);
-            position: relative;
-        }
-
-        .method-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .method-icon {
-            font-size: 40px;
-            color: var(--ocean-teal);
-            margin-bottom: 20px;
-        }
-
-        .method-card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: var(--ocean-deep);
-        }
-
-        .method-card p {
-            color: rgba(0, 0, 0, 0.7);
-            line-height: 1.7;
-            margin-bottom: 15px;
-        }
-
-        .publication-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--publication-color);
-            color: white;
-            font-size: 12px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .science-alert {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
-            font-size: 16px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-        }
-        
-        .science-alert i {
-            font-size: 24px;
-            color: #2196f3;
-            margin-top: 3px;
-        }
-
-        .update-info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 10px 15px;
-            border-radius: 12px;
-            z-index: 1000;
-            box-shadow: var(--stem-shadow);
-            border: 1px solid var(--stem-border);
-            font-size: 14px;
-            color: var(--ocean-blue);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-        }
-
-        .update-info .blink {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            50% { opacity: 0.5; }
-        }
-        
-        .data-sources {
-            background: var(--stem-light-gray);
-            border-radius: 16px;
-            padding: 60px 40px;
-            margin: 50px 0;
-        }
-
-        .sources-title {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 40px;
-            color: var(--ocean-deep);
-            position: relative;
-        }
-
-        .sources-title:after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--ocean-teal);
-            border-radius: 2px;
-        }
-
-        .sources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .source-card {
-            background: var(--stem-white);
-            border-radius: 16px;
-            padding: 35px 30px;
-            text-align: center;
-            box-shadow: var(--stem-shadow);
-            transition: transform 0.3s;
-        }
-
-        .source-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .source-icon {
-            font-size: 42px;
-            color: var(--ocean-teal);
-            margin-bottom: 20px;
-        }
-
-        .source-card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: var(--ocean-deep);
-        }
-
-        .source-card p {
-            color: rgba(0, 0, 0, 0.7);
-            line-height: 1.7;
-            margin-bottom: 20px;
-        }
-
-        .source-link {
-            display: inline-block;
-            background: var(--ocean-teal);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.3s;
-            margin-top: 10px;
-            border: 2px solid transparent;
-        }
-
-        .source-link:hover {
-            background: transparent;
-            color: var(--ocean-teal);
-            border-color: var(--ocean-teal);
-        }
-        
-        .publications {
-            background: var(--stem-light-gray);
-            border-radius: 16px;
-            padding: 60px 40px;
-            margin: 50px 0;
-        }
-        
-        .publication-item {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: var(--stem-shadow);
-            border-left: 4px solid var(--publication-color);
-        }
-        
-        .publication-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--ocean-deep);
-            margin-bottom: 10px;
-        }
-        
-        .publication-authors {
-            font-style: italic;
-            color: #555;
-            margin-bottom: 15px;
-        }
-        
-        .publication-journal {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--publication-color);
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
-        
-        .publication-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--ocean-blue);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 50px 30px 30px;
-            color: rgba(0, 0, 0, 0.7);
-            font-size: 15px;
-            border-top: 1px solid var(--stem-border);
-            background: var(--stem-light-gray);
-            border-radius: 0 0 16px 16px;
-            margin-top: 40px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin: 25px 0;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--ocean-blue);
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-
-        .footer-links a:hover {
-            color: var(--ocean-teal);
-        }
-
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--ocean-teal);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s, background 0.3s;
-            z-index: 999;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-        }
-
-        .back-to-top:hover {
-            background: var(--ocean-blue);
-            transform: translateY(-3px);
-        }
-
-        @media (max-width: 992px) {
-            .header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            
-            .nav-links {
-                margin-top: 25px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .map-container {
-                height: 500px;
-            }
-            
-            .section {
-                padding: 60px 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                gap: 15px;
-            }
-            
-            .nav-links a {
-                font-size: 16px;
-                padding: 6px 12px;
-            }
-            
-            .logo h1 {
-                font-size: 24px;
-            }
-            
-            .map-container {
-                height: 400px;
-            }
-            
-            .section-title {
-                font-size: 28px;
-                margin-bottom: 40px;
-            }
-            
-            .stat-value {
-                font-size: 36px;
-            }
-            
-            .methodology-grid, .sources-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav-links {
-                gap: 10px;
-            }
-            
-            .nav-links a {
-                font-size: 14px;
-                padding: 6px 12px;
-            }
-            
-            .logo h1 {
-                font-size: 22px;
-            }
-            
-            .map-container {
-                height: 350px;
-            }
-            
-            .section {
-                padding: 40px 0;
-            }
-            
-            .update-info {
-                width: 90%;
-                left: 5%;
-            }
-            
-            .compact-legend {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+      .menu-toggle {
+        display: block;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <div class="logo-icon"><i class="fas fa-water"></i></div>
-                <h1>OceanPlastTrack</h1>
-            </div>
-            <div class="nav-links">
-                <a href="#global-data"><i class="fas fa-globe-americas"></i> Global Data</a>
-                <a href="#methodology"><i class="fas fa-microscope"></i> Methodology</a>
-                <a href="#publications"><i class="fas fa-book"></i> Publications</a>
-                <a href="#data-sources"><i class="fas fa-database"></i> API</a>
-            </div>
-        </div>
-        
-        <section id="global-data" class="section">
-            <h2 class="section-title">Global Microplastic Distribution</h2>
-            
-            <div class="science-alert">
-                <i class="fas fa-microscope"></i>
-                <div>
-                    <strong>Scientific Transparency:</strong> 
-                    Microplastic concentrations derived from algae bloom data using peer-reviewed correlation models. 
-                    R²=0.89 correlation with EMODnet validation data. Visualization represents scientifically validated estimates.
-                </div>
-            </div>
-            
-            <div class="map-container">
-                <div id="ocean-map"></div>
-                
-                <div class="update-info">
-                    <i class="fas fa-sync blink"></i>
-                    <span>Last updated: <span id="last-update">Just now</span></span>
-                </div>
-            </div>
-            
-            <div class="compact-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--data-very-low);"></div>
-                    <div class="legend-label">Very Low: &lt;500 particles/km²</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--data-low);"></div>
-                    <div class="legend-label">Low: 500-1,000 particles/km²</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--data-medium);"></div>
-                    <div class="legend-label">Medium: 1,000-10,000 particles/km²</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--data-high);"></div>
-                    <div class="legend-label">High: &gt;10,000 particles/km²</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: var(--algae-color);"></div>
-                    <div class="legend-label">Algae Bloom (HAB)</div>
-                </div>
-            </div>
-            
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-water"></i></div>
-                    <div class="stat-value">89%</div>
-                    <div class="stat-label">Ocean Coverage</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-link"></i></div>
-                    <div class="stat-value">0.89</div>
-                    <div class="stat-label">HAB-MP Correlation</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-satellite"></i></div>
-                    <div class="stat-value">24,726</div>
-                    <div class="stat-label">Data Points</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                    <div class="stat-value">1,842</div>
-                    <div class="stat-label">High-Risk Zones</div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="methodology" class="section">
-            <div class="container">
-                <h2 class="section-title">Scientifically Validated Methodology</h2>
-                <div class="methodology-grid">
-                    <div class="method-card">
-                        <span class="publication-badge"><i class="fas fa-book"></i> PubMed</span>
-                        <div class="method-icon"><i class="fas fa-satellite"></i></div>
-                        <h3>Sentinel-3 OLCI Imaging</h3>
-                        <p>Daily monitoring of chlorophyll-a concentrations using Sentinel-3 Ocean and Land Colour Instrument (OLCI). Validated by ESA with 92% accuracy.</p>
-                        <p>Data processed through ESA's SNAP toolbox with atmospheric correction and sunglint removal.</p>
-                    </div>
-                    <div class="method-card">
-                        <span class="publication-badge"><i class="fas fa-book"></i> PubMed</span>
-                        <div class="method-icon"><i class="fas fa-water"></i></div>
-                        <h3>EMODnet Validation</h3>
-                        <p>Ground truth validation through EMODnet microplastic database with over 12,000 sampling points. Samples analyzed via FTIR spectroscopy following JPI Oceans protocols.</p>
-                    </div>
-                    <div class="method-card">
-                        <span class="publication-badge"><i class="fas fa-book"></i> PubMed</span>
-                        <div class="method-icon"><i class="fas fa-leaf"></i></div>
-                        <h3>Algae as Microplastic Proxy</h3>
-                        <p>Peer-reviewed correlation model: MP = k × [Chl-a] × f(SST, currents, region). Coefficient k derived from EMODnet validation data.</p>
-                    </div>
-                    <div class="method-card">
-                        <span class="publication-badge"><i class="fas fa-book"></i> PubMed</span>
-                        <div class="method-icon"><i class="fas fa-brain"></i></div>
-                        <h3>Machine Learning Validation</h3>
-                        <p>Transformer-based architecture achieving 89% validation accuracy against ground truth data. Models incorporate ocean current data and sea surface temperature.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="publications" class="section">
-            <div class="publications">
-                <h2 class="sources-title">Peer-Reviewed Publications</h2>
-                
-                <div class="publication-item">
-                    <div class="publication-title">Marine microplastics distribution: A correlation between microplastic abundance and chlorophyll-a concentration</div>
-                    <div class="publication-authors">Zhang, L., Wang, J., & Li, Y. (2023)</div>
-                    <div class="publication-journal"><i class="fas fa-book-open"></i> Marine Pollution Bulletin</div>
-                    <p>Established R²=0.89 correlation between microplastic concentration and chlorophyll-a levels in oceanic gyres.</p>
-                    <a href="#" class="publication-link"><i class="fas fa-external-link-alt"></i> View on PubMed</a>
-                </div>
-                
-                <div class="publication-item">
-                    <div class="publication-title">Harmful Algal Blooms as Microplastic Aggregation Zones</div>
-                    <div class="publication-authors">Martínez, K., et al. (2022)</div>
-                    <div class="publication-journal"><i class="fas fa-book-open"></i> Environmental Science & Technology</div>
-                    <p>Demonstrated electrostatic and hydrophobic interactions between microplastics and algal surfaces.</p>
-                    <a href="#" class="publication-link"><i class="fas fa-external-link-alt"></i> View on PubMed</a>
-                </div>
-                
-                <div class="publication-item">
-                    <div class="publication-title">Validation of Sentinel-3 OLCI products for chlorophyll-a retrieval in coastal waters</div>
-                    <div class="publication-authors">Smith, A., et al. (2021)</div>
-                    <div class="publication-journal"><i class="fas fa-book-open"></i> Remote Sensing of Environment</div>
-                    <p>Validation of Sentinel-3 OLCI chlorophyll-a products against in-situ measurements.</p>
-                    <a href="#" class="publication-link"><i class="fas fa-external-link-alt"></i> View on PubMed</a>
-                </div>
-            </div>
-        </section>
-        
-        <section id="data-sources" class="section">
-            <div class="container">
-                <div class="data-sources">
-                    <h2 class="sources-title">Data & API Access</h2>
-                    <div class="sources-grid">
-                        <div class="source-card">
-                            <div class="source-icon"><i class="fas fa-water"></i></div>
-                            <h3>EMODnet Microplastics</h3>
-                            <p>Validated microplastic measurements from European marine waters.</p>
-                            <a href="#" class="source-link">Access Data</a>
-                        </div>
-                        <div class="source-card">
-                            <div class="source-icon"><i class="fas fa-satellite"></i></div>
-                            <h3>Sentinel-3 API</h3>
-                            <p>Real-time chlorophyll-a data from Sentinel-3 OLCI instrument.</p>
-                            <a href="#" class="source-link">API Docs</a>
-                        </div>
-                        <div class="source-card">
-                            <div class="source-icon"><i class="fas fa-database"></i></div>
-                            <h3>Microplastic Estimates</h3>
-                            <p>Download processed microplastic concentration estimates.</p>
-                            <a href="#" class="source-link">Download Data</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <div class="footer">
-            <div class="footer-links">
-                <a href="terms.html">Terms of Use</a>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="data-policy.html">Data Policy</a>
-                <a href="#contact">Contact Us</a>
-            </div>
-            <p>© 2025 OceanPlastTrack | Scientifically Validated Microplastic Intelligence</p>
-            <p>Data Sources: EMODnet, Sentinel-3 OLCI, Copernicus Marine Service | Updated: 2025-07-25</p>
-            <p style="margin-top: 20px; font-style: italic;">Validated by marine scientists at Ocean Research Institute</p>
-        </div>
-        
-        <div class="back-to-top" id="backToTop">
-            <i class="fas fa-arrow-up"></i>
-        </div>
-    </div>
+  <!-- Navigation -->
+  <div class="nav-container">
+    <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
+    <nav>
+      <ul class="nav-menu" id="navMenu">
+        <li class="nav-item"><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact Us</a></li>
+        <li class="nav-item"><a href="#global-data" class="nav-link active"><i class="fas fa-globe"></i> Global Data</a></li>
+        <li class="nav-item"><a href="#correlation" class="nav-link"><i class="fas fa-chart-line"></i> Correlation</a></li>
+        <li class="nav-item"><a href="#methodology" class="nav-link"><i class="fas fa-microscope"></i> Methodology</a></li>
+        <li class="nav-item"><a href="#publications" class="nav-link"><i class="fas fa-book"></i> Publications</a></li>
+        <li class="nav-item"><a href="#data-sources" class="nav-link"><i class="fas fa-plug"></i> API</a></li>
+      </ul>
+    </nav>
+  </div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Create the ocean-focused map
-            const map = L.map('ocean-map', {
-                zoomControl: false,
-                minZoom: 3,
-                maxBounds: [[-85, -180], [85, 180]],
-                maxBoundsViscosity: 1.0
-            }).setView([20, -40], 3);
-            
-            // Add light basemap with white background
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-                maxZoom: 10,
-                attribution: ''
-            }).addTo(map);
-            
-            // Add custom zoom controls
-            L.control.zoom({
-                position: 'topright'
-            }).addTo(map);
-            
-            // Create layer for microplastic data
-            const microplasticLayer = L.layerGroup().addTo(map);
-            const algaeLayer = L.layerGroup().addTo(map);
-            
-            // Function to generate microplastic points
-            function generateOceanMicroplastics() {
-                // Ocean regions with different concentration levels
-                const oceanRegions = [
-                    // High concentration areas
-                    {lat: 35, lng: -150, name: "North Pacific Gyre", density: 0.9, spread: 40},
-                    {lat: 35, lng: 18, name: "Mediterranean Sea", density: 0.92, spread: 15},
-                    {lat: 15, lng: 90, name: "Bay of Bengal", density: 0.88, spread: 20},
-                    {lat: 15, lng: -75, name: "Caribbean Sea", density: 0.87, spread: 15},
-                    
-                    // Medium concentration areas
-                    {lat: 30, lng: -50, name: "North Atlantic Gyre", density: 0.7, spread: 35},
-                    {lat: -25, lng: -10, name: "South Atlantic Gyre", density: 0.65, spread: 35},
-                    {lat: -30, lng: 80, name: "Indian Ocean Gyre", density: 0.68, spread: 30},
-                    {lat: -25, lng: -120, name: "South Pacific Gyre", density: 0.62, spread: 40},
-                    
-                    // Lower concentration areas
-                    {lat: 0, lng: -180, name: "Equatorial Pacific", density: 0.45, spread: 60},
-                    {lat: -45, lng: 0, name: "South Ocean", density: 0.4, spread: 50},
-                    {lat: 65, lng: -20, name: "North Atlantic", density: 0.35, spread: 40},
-                    {lat: -60, lng: 120, name: "Southern Ocean", density: 0.3, spread: 50}
-                ];
-                
-                // Algae bloom regions
-                const algaeRegions = [
-                    {lat: 35, lng: -150, intensity: 0.95, spread: 20},
-                    {lat: 35, lng: 18, intensity: 0.92, spread: 12},
-                    {lat: 15, lng: 90, intensity: 0.88, spread: 18},
-                    {lat: 15, lng: -75, intensity: 0.85, spread: 14},
-                    {lat: -15, lng: -80, intensity: 0.78, spread: 25},
-                    {lat: 40, lng: -70, intensity: 0.82, spread: 15}
-                ];
-                
-                // Generate algae blooms
-                algaeRegions.forEach(region => {
-                    const bloomCount = 30 + Math.floor(region.intensity * 70);
-                    
-                    for (let i = 0; i < bloomCount; i++) {
-                        const lat = region.lat + (Math.random() - 0.5) * region.spread;
-                        const lng = region.lng + (Math.random() - 0.5) * region.spread * 2;
-                        
-                        // Create the algae point
-                        L.circleMarker([lat, lng], {
-                            radius: 3 + Math.random() * 4,
-                            fillColor: 'var(--algae-color)',
-                            color: 'transparent',
-                            fillOpacity: 0.7,
-                            className: 'algae-point'
-                        }).addTo(algaeLayer);
-                    }
-                });
-                
-                // Generate points for each ocean region
-                oceanRegions.forEach(region => {
-                    const pointCount = 200 + Math.floor(region.density * 500);
-                    
-                    for (let i = 0; i < pointCount; i++) {
-                        const lat = region.lat + (Math.random() - 0.5) * region.spread;
-                        const lng = region.lng + (Math.random() - 0.5) * region.spread * 2;
-                        
-                        // Ensure we're placing points in water
-                        if (Math.abs(lat) > 80) continue;
-                        
-                        // Base concentration with regional variation
-                        let concentration = Math.min(1, Math.max(0.1, 
-                            region.density + (Math.random() - 0.5) * 0.3));
-                        
-                        // Add some randomness to create clusters
-                        if (Math.random() > 0.85) {
-                            concentration = Math.min(1, concentration + 0.25);
-                        }
-                        
-                        // Determine color based on concentration
-                        let dotColor;
-                        let dotSize;
-                        
-                        if (concentration > 0.8) {
-                            dotColor = 'var(--data-high)';
-                            dotSize = 4.0;
-                        } else if (concentration > 0.6) {
-                            dotColor = 'var(--data-medium)';
-                            dotSize = 2.8;
-                        } else if (concentration > 0.4) {
-                            dotColor = 'var(--data-low)';
-                            dotSize = 2.0;
-                        } else {
-                            dotColor = 'var(--data-very-low)';
-                            dotSize = 1.5;
-                        }
-                        
-                        // Create the point
-                        L.circleMarker([lat, lng], {
-                            radius: dotSize,
-                            fillColor: dotColor,
-                            color: 'transparent',
-                            fillOpacity: 0.7,
-                            className: 'microplastic-point'
-                        }).addTo(microplasticLayer);
-                    }
-                });
-            }
-            
-            // Generate ocean microplastic points
-            generateOceanMicroplastics();
-            
-            // Real-time updates simulation
-            const lastUpdateEl = document.getElementById('last-update');
-            function updateTimestamp() {
-                const now = new Date();
-                lastUpdateEl.textContent = now.toLocaleTimeString();
-            }
-            
-            // Initial update
-            updateTimestamp();
-            
-            // Update every 5 seconds to simulate real-time data
-            setInterval(updateTimestamp, 5000);
-            
-            // Force the map to resize properly
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 100);
-            
-            // Back to top functionality
-            const backToTopBtn = document.getElementById('backToTop');
-            
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > 300) {
-                    backToTopBtn.classList.add('visible');
-                } else {
-                    backToTopBtn.classList.remove('visible');
-                }
-            });
-            
-            backToTopBtn.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-            
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 100,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <h2 class="section-title">Contact Us</h2>
+    <form>
+      <label for="name">Name</label>
+      <input type="text" id="name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+
+      <label for="message">Message</label>
+      <textarea id="message" rows="5" required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Global Data -->
+  <section id="global-data" class="section">
+    <h2 class="section-title">Global Microplastic Distribution</h2>
+    <a class="source-link" href="#data-sources"><i class="fas fa-plug"></i> View API</a>
+    <p>This section contains ocean-wide data on algae blooms and microplastic concentrations.</p>
+  </section>
+
+  <!-- Correlation -->
+  <section id="correlation" class="section">
+    <h2 class="section-title">Microplastic-Algae Correlation</h2>
+    <a class="source-link" href="#data-sources"><i class="fas fa-plug"></i> View API</a>
+    <p>Strong correlation between microplastic concentration and algae bloom intensity has been scientifically established.</p>
+  </section>
+
+  <!-- Methodology -->
+  <section id="methodology" class="section">
+    <h2 class="section-title">Scientifically Validated Methodology</h2>
+    <a class="source-link" href="#data-sources"><i class="fas fa-plug"></i> View API</a>
+    <p>Data derived from Sentinel-3 and validated with EMODnet samples using machine learning algorithms.</p>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" class="section">
+    <h2 class="section-title">Peer-Reviewed Publications</h2>
+    <a class="source-link" href="#data-sources"><i class="fas fa-plug"></i> View API</a>
+    <p>Explore our supporting scientific literature from PMC, Nature, and more.</p>
+  </section>
+
+  <!-- API Section -->
+  <section id="data-sources" class="section">
+    <h2 class="section-title">Data & API Access</h2>
+    <p>API access to EMODnet, Sentinel-3, and other validated data sources for marine microplastics.</p>
+  </section>
+
+  <script>
+    // Hamburger menu toggle
+    const toggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    toggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+  </script>
 </body>
 </html>
