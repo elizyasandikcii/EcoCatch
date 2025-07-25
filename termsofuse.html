@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCatch | Policies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --ocean-blue: #1F7A8C;
+            --ocean-teal: #00A896;
+            --ocean-deep: #005F73;
+            --stem-white: #FFFFFF;
+            --stem-light-gray: #f8f9fa;
+            --stem-border: rgba(0, 0, 0, 0.08);
+            --stem-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #f0f9ff, #e6f7ff, #f0f9ff);
+            color: #121212;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Floating Contact Button */
+        .contact-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--ocean-teal);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 998;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .contact-button:hover {
+            background: var(--ocean-blue);
+            transform: translateY(-3px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 90, 100, 0.85), rgba(0, 60, 73, 0.9)), 
+                        url('https://images.unsplash.com/photo-1503756234508-e32369269deb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: -1px;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--ocean-deep);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(31, 122, 140, 0.1);
+            color: var(--ocean-teal);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--ocean-teal);
+            color: white;
+        }
+
+        .policy-content {
+            background: var(--stem-white);
+            border-radius: 16px;
+            padding: 60px;
+            margin: -50px auto 50px;
+            box-shadow: var(--stem-shadow);
+            position: relative;
+            z-index: 2;
+        }
+
+        .policy-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: var(--ocean-deep);
+            position: relative;
+        }
+
+        .policy-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: var(--ocean-teal);
+            border-radius: 3px;
+        }
+
+        .policy-section {
+            margin-bottom: 40px;
+        }
+
+        .policy-section h2 {
+            font-size: 1.8rem;
+            color: var(--ocean-deep);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--stem-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .policy-section h2 i {
+            color: var(--ocean-teal);
+        }
+
+        .policy-section p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .policy-section ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .policy-section ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+            line-height: 1.7;
+        }
+
+        .policy-section ul li:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: var(--ocean-teal);
+            border-radius: 50%;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 50px 30px 30px;
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 15px;
+            border-top: 1px solid var(--stem-border);
+            background: var(--stem-light-gray);
+            border-radius: 0 0 16px 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--ocean-blue);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--ocean-teal);
+        }
+
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--ocean-teal);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .back-to-home:hover {
+            background: var(--ocean-blue);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .policy-content {
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 40vh;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .policy-title {
+                font-size: 2rem;
+            }
+            
+            .nav-link {
+                padding: 8px 15px;
+                font-size: 1rem;
+            }
+            
+            .policy-content {
+                padding: 30px 20px;
+                margin: -30px auto 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .policy-title {
+                font-size: 1.8rem;
+            }
+            
+            .policy-section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .nav-item {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Contact Button -->
+    <a href="#contact" class="contact-button">
+        <i class="fas fa-envelope"></i>
+        <span>Contact Us</span>
+    </a>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>EcoCatch Policies</h1>
+    </section>
+
+    <!-- Navigation Menu -->
+    <div class="nav-container">
+        <nav class="nav-menu">
+            <div class="nav-item">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="terms.html" class="nav-link active">
+                    <i class="fas fa-file-contract"></i> Terms of Use
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="privacy.html" class="nav-link">
+                    <i class="fas fa-shield-alt"></i> Privacy Policy
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="data-policy.html" class="nav-link">
+                    <i class="fas fa-database"></i> Data Policy
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="policy-content">
+            <h1 class="policy-title">Terms of Use</h1>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-check-circle"></i> Acceptance of Terms</h2>
+                <p>By accessing or using the EcoCatch website, you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use our website.</p>
+                <p>These terms may be updated periodically. Your continued use of the website constitutes acceptance of any changes.</p>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-user"></i> User Responsibilities</h2>
+                <p>When using our website, you agree to:</p>
+                <ul>
+                    <li>Provide accurate information when requested</li>
+                    <li>Use the website only for lawful purposes</li>
+                    <li>Not attempt to gain unauthorized access to our systems</li>
+                    <li>Respect the intellectual property rights of EcoCatch and third parties</li>
+                    <li>Not use our services to distribute spam or malicious content</li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-lock"></i> Intellectual Property</h2>
+                <p>All content on this website, including text, graphics, logos, images, and software, is the property of EcoCatch or its content suppliers and is protected by intellectual property laws.</p>
+                <p>You may not reproduce, distribute, modify, or republish any content from this website without our prior written consent.</p>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-ban"></i> Restrictions</h2>
+                <p>You may not:</p>
+                <ul>
+                    <li>Use the website in any way that could damage, disable, or impair our services</li>
+                    <li>Attempt to reverse engineer or decompile any software on our website</li>
+                    <li>Use any automated system to access the website without permission</li>
+                    <li>Interfere with other users' enjoyment of the website</li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-exclamation-triangle"></i> Disclaimer of Warranties</h2>
+                <p>Our website is provided "as is" without warranties of any kind. EcoCatch does not warrant that:</p>
+                <ul>
+                    <li>The website will be uninterrupted or error-free</li>
+                    <li>The results obtained from using the website will be accurate or reliable</li>
+                    <li>The quality of any products, services, or information obtained through the website will meet your expectations</li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-balance-scale"></i> Limitation of Liability</h2>
+                <p>EcoCatch shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from:</p>
+                <ul>
+                    <li>The use or inability to use the website</li>
+                    <li>Unauthorized access to or alteration of your transmissions or data</li>
+                    <li>Statements or conduct of any third party on the website</li>
+                    <li>Any other matter relating to the website</li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-link"></i> Links to Third-Party Sites</h2>
+                <p>Our website may contain links to third-party websites. These links are provided for your convenience only.</p>
+                <p>EcoCatch has no control over and assumes no responsibility for the content, privacy policies, or practices of any third-party websites.</p>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-gavel"></i> Governing Law</h2>
+                <p>These Terms of Use shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.</p>
+                <p>Any disputes arising from these terms will be resolved in the state or federal courts located in San Francisco, California.</p>
+            </div>
+            
+            <div class="policy-section">
+                <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+                <p>If you have any questions about these Terms of Use, please contact us at:</p>
+                <p><strong>Email:</strong> legal@ecocatch.org</p>
+                <p><strong>Mail:</strong> EcoCatch Legal Department, 123 Marine Drive, Ocean City, CA 12345</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="index.html" class="back-to-home">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-links">
+                <a href="terms.html">Terms of Use</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="data-policy.html">Data Policy</a>
+                <a href="index.html#contact">Contact Us</a>
+            </div>
+            <p>© 2025 EcoCatch | Scientifically Validated Microplastic Intelligence</p>
+            <p>Data Sources: EMODnet, Sentinel-3 OLCI, Copernicus Marine Service | Updated: 2025-07-25</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation active state
+            const navLinks = document.querySelectorAll('.nav-link');
+            const currentPage = window.location.pathname.split('/').pop();
+            
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
