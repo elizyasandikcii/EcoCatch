@@ -912,6 +912,28 @@
             color: var(--ocean-teal);
         }
 
+        /* ADDED: EkoBiz link style */
+        .ekobiz-link {
+            margin-top: 30px;
+            padding: 10px;
+            font-size: 14px;
+            color: var(--ocean-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .ekobiz-link:hover {
+            color: var(--ocean-teal);
+            transform: translateY(-2px);
+        }
+        
+        .ekobiz-link i {
+            font-size: 16px;
+        }
+
         @media (max-width: 1200px) {
             .correlation-grid, .contact-grid {
                 grid-template-columns: 1fr;
@@ -1484,6 +1506,12 @@
             <p>© 2025 EcoCatch | Scientifically Validated Microplastic Intelligence</p>
             <p>Data Sources: EMODnet, Sentinel-3 OLCI, Copernicus Marine Service | Updated: 2025-07-25</p>
             <p style="margin-top: 20px; font-style: italic;">Designed by 8.6 billion neurons and a dream...-a TILT project</p>
+            
+            <!-- ADDED: EkoBiz link at the very bottom -->
+            <a href="ekobizindex.html" class="ekobiz-link">
+                <i class="fas fa-external-link-alt"></i>
+                Go to EkoBiz (Turkish Version)
+            </a>
         </div>
     </div>
 
